@@ -3,16 +3,8 @@
             [status-im.utils.mixpanel :as mixpanel]
             [cljs.core.async :as async]))
 
-(deftest events
-  (is (not (nil? mixpanel/events))))
-
-(deftest matches?
-  (is (true? (mixpanel/matches? [:key] [:key])))
-  (is (false? (mixpanel/matches? [:key1] [:key2])))
-  (is (true? (mixpanel/matches? [:key :subkey] [:key])))
-  (is (false? (mixpanel/matches? [:key] [:key :subkey]))))
-
-(def definitions {[:key] {:trigger [:key]} [:key :subkey] {:trigger [:key :subkey]}})
+(def definitions (mixpanel/event->triggers [{:trigger [:key]}
+                                            {:trigger [:key :subkey]}]))
 
 (deftest matching-event
   (is (empty? (mixpanel/matching-events [:non-existing] definitions)))
